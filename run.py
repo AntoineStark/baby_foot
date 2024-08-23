@@ -73,6 +73,35 @@ def generate_sh(players, elo_start, f):
     f.write("esac\n")
 
 
+def generate_sh_with_rankings(players, elo_start, f):
+    # generate shell script that, given a name, outputs the ELO rating
+    f.write("#! /bin/bash\n")
+    f.write("case $1 in\n")
+    for i, (player, elo) in enumerate(
+        sorted(players.items(), key=lambda x: x[1], reverse=True)
+    ):
+        emoji = ["🥇", "🥈", "🥉"]
+        icon = emoji[i] if i < 3 else ""
+
+        f.write(f"{player})\n")
+        f.write(f"echo {elo:.0f}{icon}\n")
+        f.write(";;\n")
+    f.write("*)\n")
+    f.write(f"echo {elo_start}\n")
+    f.write(";;\n")
+
+    f.write("esac\n")
+
+    # print rankings in the shell script as a comment
+    f.write("\n# Rankings\n")
+    for i, (player, elo) in enumerate(
+        sorted(players.items(), key=lambda x: x[1], reverse=True)
+    ):
+        emoji = ["🥇", "🥈", "🥉"]
+        icon = emoji[i] if i < 3 else ""
+        f.write(f"# {i+1}. {player}: {elo:.0f}{icon}\n")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-T", type=int, default=T, help="ELO performance rating scale")
@@ -83,6 +112,11 @@ if __name__ == "__main__":
         type=str,
         default=False,
         help="outputs an shell scipt that generates the ELO ratings",
+    )
+    parser.add_argument(
+        "-r",
+        help="display rankings in the shell",
+        action="store_true",
     )
 
     args = parser.parse_args()
@@ -110,9 +144,16 @@ if __name__ == "__main__":
 
     if args.o:
         with open(args.o, "w") as f:
-            generate_sh(players, elo_start, f)
+            if args.r:
+                generate_sh_with_rankings(players, elo_start, f)
+            else:
+                generate_sh(players, elo_start, f)
             os.chmod(args.o, 0o755)
 
-    # print rankings
-    for player, elo in sorted(players.items(), key=lambda x: x[1], reverse=True):
-        print(f"{player}: {elo:.0f} elo")
+    print("Rankings")
+    for i, (player, elo) in enumerate(
+        sorted(players.items(), key=lambda x: x[1], reverse=True)
+    ):
+        emoji = ["🥇", "🥈", "🥉"]
+        icon = emoji[i] if i < 3 else ""
+        print(f" {i+1}. {player}: {elo:.0f}{icon}")
