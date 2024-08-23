@@ -75,8 +75,8 @@ def generate_sh(players, elo_start, f):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-T", type=int, default=T, help="ELO rating scale")
-    parser.add_argument("-K", type=int, default=K, help="ELO rating difference scale")
+    parser.add_argument("-T", type=int, default=T, help="ELO performance rating scale")
+    parser.add_argument("-K", type=int, default=K, help="ELO rating change magnitude")
     parser.add_argument("-E", type=int, default=elo_start, help="ELO rating start")
     parser.add_argument(
         "-o",
