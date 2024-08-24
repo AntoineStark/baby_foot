@@ -110,13 +110,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "-o",
         type=str,
-        default=False,
+        default="get_elo.sh",
         help="outputs an shell scipt that generates the ELO ratings",
     )
     parser.add_argument(
-        "-r",
-        help="display rankings in the shell",
-        action="store_true",
+        "--no-rankings",
+        help="do not include rankings in the shell script",
+        action="store_false",
     )
 
     args = parser.parse_args()
@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
     if args.o:
         with open(args.o, "w") as f:
-            if args.r:
+            if args.no_rankings:
                 generate_sh_with_rankings(players, elo_start, f)
             else:
                 generate_sh(players, elo_start, f)

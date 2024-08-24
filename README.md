@@ -22,7 +22,10 @@ This script computes the ELO ratings of players using their game results. It sup
 - `-T [int]`: Set the ELO performance rating scale (default: 400).
 - `-K [int]`: Set the ELO rating change magnitude (default: 128).
 - `-E [int]`: Set the starting ELO rating (default: 1500).
-- `-o [filename]`: Output a shell script for fetching ELO ratings.
+- `-o [filename]`: Set the path of the output shell script for fetching ELO ratings (default: get_elo.sh).
+- `--no-ranking`: Do not display player rankings.
+- `-h`: Display help message.
+
 
 #### Example
 
